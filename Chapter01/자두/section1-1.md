@@ -40,10 +40,11 @@ model.select("SELECT id FROM item;")
 ```
 
 의존성 주입 후
-*  여러 DBMS으로 `Model` 객체를 정의할 수 있다.
-* `MysqlClient`, `MongoClient`의 변경으로부터 `Model`이 비교적 자유롭다.
+* mysql syntax 변경으로부터 `Model`이 자유롭다.
+* `Model` 클래스 변경 없이 `MysqlClient` 말고도 다른 클래스 객체로 `Model` 객체를 만들 수 있다.
+
 ```python
-class DatabaseClient:
+class MysqlClient:
     def __init__(self, host, port, user, password):
         self.host = host
         self.port = port
@@ -51,17 +52,19 @@ class DatabaseClient:
         self.password = password
 
     def select(self, query):
-        pass
-        
-class MysqlClient(DatabaseClient):
-    def select(self, query):
         if not query.startwith("SELECT"):
             raise Exception("wrong syntax")
         print("query to mysql...")
         return 1
 
+    
+class MongoClient:
+    def __init__(self, host, port, user, password):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
 
-class MongoClient(DatabaseClient):
     def select(self, query):
         if "find" not in query:
             raise Exception("wrong syntax")
@@ -70,18 +73,12 @@ class MongoClient(DatabaseClient):
 
 
 class Model:
-    def __init__(self, client: DatabaseClient):
+    def __init__(self, client):
         self.client = client
-    
-    def select(self, query):
-        return self.client.select(query)
 
 
 model1 = Model(MysqlClient('localhost', 3306, 'root', '1234'))  # Model 에 MysqlClient 객체 주입
-model1.select("SELECT id FROM item WHERE name = 'chair';")
-
 model2 = Model(MongoClient('localhost', 27017, 'root', '1234'))  # Model 에 MongoClient 객체 주입
-model2.select("db.item.find({'name': 'chair'})")
 ```
 
 ## 팩토리패턴
@@ -90,7 +87,7 @@ model2.select("db.item.find({'name': 'chair'})")
 
 
 [예시]
-* `MysqlClient.select()` 또는 `MongoClient.select()` 에서 변경이 발생해도 `DatabaseClient`, `Model` 은 변경하지 않는다.
+* `MysqlClient.select()` 또는 `MongoClient.select()` 에서 변경이 발생해도 `DatabaseClient`는 변경하지 않는다.
 ```python
 # DatabaseClient 에서 뼈대를 결정
 class DatabaseClient:
@@ -102,7 +99,6 @@ class DatabaseClient:
 
     def select(self, query):
         pass
-        
 
 
 # DatabaseClient를 상속받은 자식 클래스에서 구체적인 로직 수행.
@@ -126,8 +122,9 @@ class MongoClient(DatabaseClient):
 class Model:
     def __init__(self, client: DatabaseClient):
         self.client = client
-    
-    def select(self, query):
-        return self.client.select(query)
+
+model1 = Model(MysqlClient('localhost', 3306, 'root', '1234'))  # Model 에 MysqlClient 객체 주입
+model2 = Model(MongoClient('localhost', 27017, 'root', '1234'))  # Model 에 MongoClient 객체 주입
 ```
+
 
