@@ -127,4 +127,62 @@ model1 = Model(MysqlClient('localhost', 3306, 'root', '1234'))  # Model 에 Mysq
 model2 = Model(MongoClient('localhost', 27017, 'root', '1234'))  # Model 에 MongoClient 객체 주입
 ```
 
+### 전략 패턴
+* 어떤 객체의 행위를 바꾸고 싶은 경우 행위의 변경없이 객체의 행위가 들고있는 전략(캡슐화된 로직)을 바뀌주는 패턴. (설명만 읽어서는 이해가 잘 안된다..)
+
+[예시]
+```python
+class PaymentMethod:
+    def __init__(self, username):
+        self.username = username
+
+    def pay(self):
+        pass
+
+
+# 카카오페이로 결제하는 전략
+class KakaoPay(PaymentMethod):
+    def __init__(self, username: str, kakao_user_id: int):
+        super().__init__(username)
+        self.kakao_user_id = kakao_user_id
+
+    def pay(self):
+        print(f"pay with kakao...{self.kakao_user_id}")
+
+
+# 네이버페이로 결제하는 전략
+class NaverPay(PaymentMethod):
+    def __init__(self, username: str, naver_user_id: str):
+        super().__init__(username)
+        self.naver_user_id = naver_user_id
+
+    def pay(self):
+        print(f"pay with naver...{self.naver_user_id}")
+
+
+class Item:
+    def __init__(self, name):
+        self.name = name
+
+
+class Order:
+    def __init__(self, items):
+        self.items = items
+
+    # 주문 결제
+    def pay(self, payment_method: PaymentMethod):
+        payment_method.pay()
+
+
+# '주문 결제' 라는 행위(Order.pay() 메서드)의 변경없이 행위가 가지고 있는 전략 (KaKaoPay, NaverPay) 을 바꿔줌.
+order = Order(items=[Item(name="의자"), Item(name="책상")])
+order.pay(KakaoPay(username='자두', kakao_user_id=1234))
+order.pay(NaverPay(username='살구', naver_user_id="ABCD1234"))
+```
+코드 실행결과
+```
+pay with kakao...1234
+pay with naver...ABCD1234
+```
+
 
