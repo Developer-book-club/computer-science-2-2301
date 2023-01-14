@@ -53,6 +53,10 @@ hello
 * 예) 비즈니스 로직을 담당하는 클래스는 데이터베이스 쿼리, 캐싱, external API call 과 같은 세부적인 역할을 담당하는 클래스에 의존해서는 안된다.
 * 세부적인 역할을 담당하는 클래스는 추상화시켜서 비즈니스를 담당하는 클래스의 의존을 최소화 해야 한다.
 
+---
+부가자료 출처
+* [일급객체란?](https://velog.io/@reveloper-1311/%EC%9D%BC%EA%B8%89-%EA%B0%9D%EC%B2%B4First-Class-Object%EB%9E%80)
+* [객체지향 프로그래밍의 5가지 설계 원칙, 실무 코드로 살펴보는 SOLID](https://mangkyu.tistory.com/194)
 
 ---
 ### chapter1 읽고 느낀 점

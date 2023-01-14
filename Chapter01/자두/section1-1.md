@@ -303,3 +303,8 @@ Headers {
   'user-id': 1234
 }
 ```
+
+---
+
+부가자료 출처
+* [학교에서 알려주지 않는 17가지 실무 개발 기술](https://product.kyobobook.co.kr/detail/S000001810264?LINK=NVB&NaPm=ct%3Dlcvkeq88%7Cci%3D2e99c2e0c6be3d216790dd22fbf3319e5d5e7cbb%7Ctr%3Dboksl1%7Csn%3D5342564%7Chk%3Db36112757a20e28d7f6e71dc4319b8cc10934607)
